@@ -1,57 +1,44 @@
-import { Plus, Settings, Moon, Sun } from "lucide-react";
-
 const Navbar = ({ darkMode, setDarkMode, onNewTaskClick }) => {
-  const toggleTheme = () => setDarkMode(!darkMode);
-
   return (
     <nav
-      className={`flex justify-between items-center px-6 py-3 mx-auto mt-4 w-[90%] max-w-6xl 
-        rounded-2xl border shadow-lg backdrop-blur-md transition-all duration-300
+      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 py-2 border-b backdrop-blur-md z-50 transition-all duration-300
         ${
           darkMode
-            ? "bg-[#0d1117]/70 border-slate-800"
-            : "bg-white/60 border-gray-200"
+            ? "bg-slate-900/80 border-slate-800 text-gray-200"
+            : "bg-gray-100/80 border-gray-300 text-gray-800"
         }`}
     >
-      {/* Left Section */}
-      <div className="flex items-center gap-3">
-        <span
-          className={`font-semibold px-4 py-1.5 rounded-lg text-lg bg-gradient-to-r from-indigo-500 to-purple-500 text-white`}
-        >
-          TaskForge
-        </span>
-        <Settings
-          className={`${
-            darkMode ? "text-gray-400 hover:text-gray-200" : "text-gray-600 hover:text-gray-800"
-          } transition cursor-pointer`}
-          size={20}
-        />
-      </div>
+      {/* Logo / Brand */}
+      <h1 className="text-xl font-semibold tracking-wide">
+        TaskForge ⚙️
+      </h1>
 
-      {/* Right Section */}
       <div className="flex items-center gap-4">
+        {/* New Task Button */}
         <button
           onClick={onNewTaskClick}
-          className={`px-4 py-1.5 rounded-lg border text-sm flex items-center gap-2 transition 
+          className={`px-4 py-2 rounded-lg text-sm font-medium transition
             ${
               darkMode
-                ? "bg-[#1e2329] hover:bg-[#2a3037] text-gray-200 border-slate-700"
-                : "bg-gray-100 hover:bg-gray-200 text-gray-800 border-gray-300"
+                ? "bg-indigo-600 hover:bg-indigo-500 text-white"
+                : "bg-indigo-500 hover:bg-indigo-400 text-white"
             }`}
         >
-          <Plus size={16} /> New Task
+          + New Task
         </button>
 
+        {/* Dark/Light Mode Toggle */}
         <button
-          onClick={toggleTheme}
-          className={`w-9 h-9 rounded-full flex items-center justify-center transition 
+          onClick={() => setDarkMode(!darkMode)}
+          className={`w-10 h-10 flex items-center justify-center rounded-full border transition
             ${
               darkMode
-                ? "bg-[#1e2329] border border-slate-700 text-yellow-400"
-                : "bg-gray-200 border border-gray-300 text-gray-800"
+                ? "bg-slate-800 border-slate-700 hover:bg-slate-700"
+                : "bg-white border-gray-300 hover:bg-gray-200"
             }`}
+          title="Toggle theme"
         >
-          {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+          {darkMode ? "🌙" : "☀️"}
         </button>
       </div>
     </nav>
