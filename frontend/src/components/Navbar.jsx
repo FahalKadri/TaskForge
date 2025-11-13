@@ -1,7 +1,7 @@
 const Navbar = ({ darkMode, setDarkMode, onNewTaskClick }) => {
   return (
     <nav
-      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 py-3 border-b backdrop-blur-md z-50 transition-all duration-300
+      className={`fixed top-0 left-0 w-full flex justify-between items-center px-6 py-2 border-b backdrop-blur-md z-50 transition-all duration-300
         ${
           darkMode
             ? "bg-slate-900/80 border-slate-800 text-gray-200"
