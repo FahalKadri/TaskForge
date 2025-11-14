@@ -239,8 +239,8 @@ function App() {
               onChange={(e) => setTitle(e.target.value)}
               className={`w-full px-4 py-2 rounded-lg mb-4 outline-none transition ${
                 darkMode
-                  ? "bg-slate-800 text-white placeholder-gray-400 focus:ring-2 focus:ring-indigo-500"
-                  : "bg-gray-100 text-gray-900 placeholder-gray-500 border border-gray-300 focus:ring-2 focus:ring-indigo-400"
+                  ? "bg-slate-800 text-white placeholder-blue-400 focus:ring-2 focus:ring-indigo-500"
+                  : "bg-gray-100 text-gray-900 placeholder-blue-500 border border-gray-300 focus:ring-2 focus:ring-indigo-400"
               }`}
             />
 
@@ -250,7 +250,7 @@ function App() {
                 className={`px-4 py-2 rounded-lg transition ${
                   darkMode
                     ? "bg-slate-700 hover:bg-slate-600 text-gray-200"
-                    : "bg-gray-200 hover:bg-gray-300 text-gray-800"
+                    : "bg-gray-200 hover:bg-blue-300 text-gray-800"
                 }`}
               >
                 Cancel
