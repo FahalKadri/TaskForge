@@ -141,7 +141,7 @@ function App() {
                 You’re all caught up! ✨
               </p>
               <p className="text-sm mt-1 text-indigo-400">
-                Add a new task to get started 🧠
+                Add a new task to get started 💪🏻
               </p>
             </div>
           ) : (
