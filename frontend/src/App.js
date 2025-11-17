@@ -9,6 +9,9 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
+  // NEW: filter option
+  const [filter, setFilter] = useState("all");
+
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/tasks/")
       .then((res) => res.json())
@@ -79,6 +82,14 @@ function App() {
     ? (completedTasks / totalTasks) * 100
     : 0;
 
+  // FILTER LOGIC
+  const filteredTasks =
+    filter === "all"
+      ? tasks
+      : filter === "completed"
+      ? tasks.filter((t) => t.completed)
+      : tasks.filter((t) => !t.completed);
+
   return (
     <div
       className={`min-h-screen flex flex-col transition-colors duration-500 overflow-x-hidden ${
@@ -94,6 +105,7 @@ function App() {
           setDarkMode={setDarkMode}
           onNewTaskClick={() => setIsModalOpen(true)}
         />
+
         {/* THIN SCROLL BAR */}
         <div
           className={`h-1 ${
@@ -105,18 +117,24 @@ function App() {
 
       {/* MAIN CONTENT */}
       <main className="flex-1 overflow-y-auto px-4 sm:px-6 py-10 flex flex-col items-center">
-        <h1 className="text-4xl font-bold mb-2 tracking-wide mt-10">TaskForge ⚙️</h1>
-        <p className={`${darkMode ? "text-gray-400" : "text-gray-600"} mb-8`}>
+        <h1 className="text-4xl font-bold mb-2 tracking-wide mt-10">
+          TaskForge ⚙️
+        </h1>
+        <p
+          className={`${darkMode ? "text-gray-400" : "text-gray-600"} mb-8`}
+        >
           Forge your productivity, one task at a time.
         </p>
 
         <div
           className={`w-full max-w-md rounded-2xl p-6 shadow-lg border transition-all duration-300 mb-32
-            ${darkMode ? "bg-slate-900/70 border-slate-800" : "bg-white border-gray-300"}`}
+            ${
+              darkMode
+                ? "bg-slate-900/70 border-slate-800"
+                : "bg-white border-gray-300"
+            }`}
         >
-          {/* ============================
-              ADD TASK BUTTON INSIDE CARD
-              ============================ */}
+          {/* ADD TASK BUTTON */}
           <div className="flex justify-end mb-4">
             <button
               onClick={() => setIsModalOpen(true)}
@@ -131,24 +149,46 @@ function App() {
             </button>
           </div>
 
-          {totalTasks === 0 ? (
+          {/* FILTER TABS — STYLE A */}
+          <div className="flex justify-center gap-6 mb-6">
+            {["all", "completed", "pending"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                className={`pb-1 text-sm font-medium capitalize transition ${
+                  filter === f
+                    ? darkMode
+                      ? "border-b-2 border-indigo-400 text-indigo-300"
+                      : "border-b-2 border-indigo-600 text-indigo-600"
+                    : darkMode
+                    ? "text-gray-400 hover:text-gray-200"
+                    : "text-gray-600 hover:text-gray-800"
+                }`}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
+          {/* EMPTY STATE */}
+          {filteredTasks.length === 0 ? (
             <div className="text-center py-16">
               <p
                 className={`${
                   darkMode ? "text-gray-400" : "text-gray-600"
                 } text-lg`}
               >
-                You’re all caught up! ✨
+                No tasks found ✨
               </p>
               <p className="text-sm mt-1 text-indigo-400">
-                Add a new task to get started 💪🏻
+                Try changing your filter
               </p>
             </div>
           ) : (
             <>
               {/* TASK LIST */}
               <ul className="space-y-3">
-                {tasks.map((task) => (
+                {filteredTasks.map((task) => (
                   <li
                     key={task.id}
                     className={`flex justify-between items-center px-4 py-3 rounded-lg transition ${

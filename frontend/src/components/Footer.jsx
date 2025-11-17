@@ -10,7 +10,7 @@ const Footer = ({ darkMode }) => {
     >
       <div className="max-w-3xl mx-auto">
         <p>
-          Built with ❤️ by{" "}
+          Built by{" "}
           <span className="font-semibold text-indigo-500">TaskForge</span>
         </p>
         <p className="text-xs mt-1">
