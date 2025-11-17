@@ -17,3 +17,31 @@
 html, body, #root {
   height: 100%;
 }
+/* Search Bar */
+#searchInput {
+  width: 250px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #0f1629;
+  color: #fff;
+  font-size: 15px;
+  box-shadow: 0 0 0 1px #222a42 inset;
+  transition: 0.3s ease;
+}
+
+#searchInput::placeholder {
+  color: #8b8b8b;
+}
+
+#searchInput:focus {
+  box-shadow: 0 0 0 2px #5b6bff inset;
+}
+
+.task-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}

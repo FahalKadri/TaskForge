@@ -9,8 +9,10 @@ function App() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
-  // NEW: filter option
+  // FILTER + SEARCH
   const [filter, setFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [searchFocused, setSearchFocused] = useState(false);
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/tasks/")
@@ -75,6 +77,29 @@ function App() {
       .catch((err) => console.log(err));
   };
 
+  // HIGHLIGHT FUNCTION (Mint Green)
+  const highlightMatch = (text) => {
+    if (!searchTerm) return text;
+
+    const regex = new RegExp(`(${searchTerm})`, "gi");
+    return text.split(regex).map((part, i) =>
+      regex.test(part) ? (
+        <mark
+          key={i}
+          className="rounded px-1"
+          style={{
+            backgroundColor: "#41f1b6",
+            color: darkMode ? "#000" : "#000",
+          }}
+        >
+          {part}
+        </mark>
+      ) : (
+        part
+      )
+    );
+  };
+
   // PROGRESS CALC
   const completedTasks = tasks.filter((t) => t.completed).length;
   const totalTasks = tasks.length;
@@ -82,13 +107,16 @@ function App() {
     ? (completedTasks / totalTasks) * 100
     : 0;
 
-  // FILTER LOGIC
-  const filteredTasks =
-    filter === "all"
-      ? tasks
-      : filter === "completed"
-      ? tasks.filter((t) => t.completed)
-      : tasks.filter((t) => !t.completed);
+  // FILTER + SEARCH COMBINED
+  const filteredTasks = tasks
+    .filter((task) => {
+      if (filter === "completed") return task.completed;
+      if (filter === "pending") return !task.completed;
+      return true;
+    })
+    .filter((task) =>
+      task.title.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
   return (
     <div
@@ -134,8 +162,41 @@ function App() {
                 : "bg-white border-gray-300"
             }`}
         >
-          {/* ADD TASK BUTTON */}
-          <div className="flex justify-end mb-4">
+          {/* SEARCH + ADD BUTTON */}
+          <div className="flex justify-between items-center mb-4 gap-3">
+            <div className="relative w-2/3">
+              <input
+                type="text"
+                placeholder="Search tasks..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onFocus={() => setSearchFocused(true)}
+                onBlur={() => setSearchFocused(false)}
+                className={`w-full px-3 py-2 rounded-lg text-sm outline-none transition-all duration-300
+                  ${
+                    darkMode
+                      ? "bg-slate-800 text-white placeholder-gray-400"
+                      : "bg-gray-100 text-gray-900 placeholder-gray-500 border border-gray-300"
+                  }
+                  ${
+                    searchFocused
+                      ? "ring-2 ring-indigo-400 scale-[1.02]"
+                      : "scale-100"
+                  }
+                `}
+              />
+
+              {/* CLEAR SEARCH BUTTON */}
+              {searchTerm && (
+                <button
+                  onClick={() => setSearchTerm("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-200 transition text-lg"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+
             <button
               onClick={() => setIsModalOpen(true)}
               className={`px-4 py-2 rounded-xl text-sm font-medium transition-all
@@ -149,7 +210,7 @@ function App() {
             </button>
           </div>
 
-          {/* FILTER TABS — STYLE A */}
+          {/* FILTER TABS */}
           <div className="flex justify-center gap-6 mb-6">
             {["all", "completed", "pending"].map((f) => (
               <button
@@ -181,7 +242,7 @@ function App() {
                 No tasks found ✨
               </p>
               <p className="text-sm mt-1 text-indigo-400">
-                Try changing your filter
+                Try changing your filter or search
               </p>
             </div>
           ) : (
@@ -213,7 +274,7 @@ function App() {
                             : "opacity-100"
                         }`}
                       >
-                        {task.title}
+                        {highlightMatch(task.title)}
                       </span>
                     </div>
                     <button
